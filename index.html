@@ -2,74 +2,89 @@
 <html>
 <head>
 	<title>First Angular App</title>
+	<!-- link to bootstrap -->
+	<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 	<!-- link to Angular -->
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
 	<!-- link to the JS file -->
     <script src="app.js"></script>
+    <style> .glyphicon-thumbs-up { cursor:pointer } </style>
 </head>
 <!-- here we declare the Angular app and the controller -->
 <body ng-app="flapperNews" ng-controller="MainCtrl">
-	<h2>Replace some text:</h2>
-	<div>
-		<!-- this is a two way data binding -->
-		{{test}}
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<div class="page-header">
+       			<h1>Flapper News</h1>
+      		</div>
+			<h2>Replace some text:</h2>
+			<div>
+				<!-- this is a two way data binding -->
+				{{test}}
+			</div>
+			<!-- use ng-repeat to display a repeating list of data -->
+			<!-- syntax as such: ng-repeat="(key, value) in myObj" -->
+			<h2>List of the post objects</h2>
+			<div ng-repeat="post in posts">	
+				{{post}}
+			</div>
+			<!-- now this will display the title and the upvotes -->
+			<h2>List of post title and upvotes</h2>
+			<div ng-repeat="post in posts">
+				{{post.title}} - upvotes: {{post.upvotes}}
+			</div>
+			<!-- and here is an Angular filter to order the posts by upvote -->
+			<h2>List of posts sorted by upvotes with Angular filter</h2>
+			<div ng-repeat="post in posts | orderBy:'-upvotes'">
+				{{post.title}} - upvotes: {{post.upvotes}}
+			</div>
+			<h2>Button for user to invoke the $scope.addPostSet function</h2>
+			<!-- this will invoke the $scope.addPost function -->
+			<button ng-click="addPostSet()" class="btn btn-primary">Post</button>
+			<h2>Form for a new post:</h2>
+			<!-- a form with Angular added to it. ng-submit directive also works with enter button -->
+			<form ng-submit="addPost()" style="margin-top:30px;">
+				<!-- ng-model directive binds to contents of the text box to $scope -->
+				<!-- this will allow the controller to access the contents of of the text box -->
+				<!-- using $scope.title  -->
+				<div class="form-group">
+					<input type="text" placeholder="title" ng-model="title" class="form-control"></input>
+					<!-- input for a link -->
+				</div>
+				<div class="form-group">
+					<input type="text" placeholder="link" ng-model="link" class="form-control"></input>
+				</div>
+					<button type="submit" class="btn btn-primary">Post</button>
+				
+			</form>
+			<h2>Here, we add a clickable upvote button</h2>
+			<div ng-repeat="post in posts | orderBy:'-upvotes'">
+				<!-- when the ^ is clicked, calls the incrementUpvotes in the controller -->
+				<!-- passes in the current instance of post. This is happening by reference (think JS 'this') -->
+				<span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(post)"></span>
+				 - upvotes: {{post.upvotes}}
+				 <span style="font-size:20px; margin-left:10px;">
+				 {{post.title}}
+				</span>
+			</div>
+			<h2>This is where posts with links, if the have them, will display:</h2>
+			<div ng-repeat="post in posts | orderBy:'-upvotes'">
+				<!-- uses Angular's hide and show directives to display the title with or without a link -->
+				<span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(post)"></span>
+				<!-- the ng-show directive shows elements when an Angular expression evaluates to true -->
+				<span style="font-size:20px; margin-left:10px;">
+					<a ng-show="post.link" href="{{post.link}}">
+						{{post.title}}
+					</a>
+					<!-- the ng-hide directive hides elements when an Angular expression evaluates to true -->
+					<span ng-hide="post.link">
+						{{post.title}}
+					</span>
+				</span>
+				-upvotes: {{post.upvotes}}
+			</div>
+		</div>
 	</div>
-	<!-- use ng-repeat to display a repeating list of data -->
-	<!-- syntax as such: ng-repeat="(key, value) in myObj" -->
-	<h2>List of the post objects</h2>
-	<div ng-repeat="post in posts">	
-		{{post}}
-	</div>
-	<!-- now this will display the title and the upvotes -->
-	<h2>List of post title and upvotes</h2>
-	<div ng-repeat="post in posts">
-		{{post.title}} - upvotes: {{post.upvotes}}
-	</div>
-	<!-- and here is an Angular filter to order the posts by upvote -->
-	<h2>List of posts sorted by upvotes with Angular filter</h2>
-	<div ng-repeat="post in posts | orderBy:'-upvotes'">
-		{{post.title}} - upvotes: {{post.upvotes}}
-	</div>
-	<h2>Button for user to invoke the $scope.addPostSet function</h2>
-	<!-- this will invoke the $scope.addPost function -->
-	<button ng-click="addPostSet()">Post</button>
-	<h2>Form for a new post:</h2>
-	<!-- a form with Angular added to it. ng-submit directive also works with enter button -->
-	<form ng-submit="addPost()">
-		<!-- ng-model directive binds to contents of the text box to $scope -->
-		<!-- this will allow the controller to access the contents of of the text box -->
-		<!-- using $scope.title  -->
-		<input type="text" placeholder="title" ng-model="title"></input>
-		<br>
-		<!-- input for a link -->
-		<input type="text", placeholder="link", ng-model="link"></input>
-		<br>
-		<button type="submit">Post</button>
-	</form>
-	<h2>Here, we add a clickable upvote button</h2>
-	<div ng-repeat="post in posts | orderBy:'-upvotes'">
-		<!-- when the ^ is clicked, calls the incrementUpvotes in the controller -->
-		<!-- passes in the current instance of post. This is happening by reference (think JS 'this') -->
-		<span ng-click="incrementUpvotes(post)">^</span>
-		{{post.title}} - upvotes: {{post.upvotes}}
-	</div>
-	<h2>This is where posts with links, if the have them, will display:</h2>
-	<div ng-repeat="post in posts | orderBy:'-upvotes'">
-		<!-- uses Angular's hide and show directives to display the title with or without a link -->
-		<span ng-click="incrementUpvotes(post)">^</span>
-		<!-- the ng-show directive shows elements when an Angular expression evaluates to true -->
-		<a ng-show="post.link" href="{{post.link}}">
-			{{post.title}}
-		</a>
-		<!-- the ng-hide directive hides elements when an Angular expression evaluates to true -->
-		<span ng-hide="post.link">
-			{{post.title}}
-		</span>
-		-upvotes: {{post.upvotes}}
-	</div>
-
-
-
 </body>
 </html>
 
