@@ -5,6 +5,9 @@
 
 // here we call the application we declared in the html file
 angular.module('flapperNews', [])
+// this is a service 
+// You may be wondering why we're using the keyword factory instead of service. 
+// In angular, factory and service are related in that they are both instances of a third entity called provider.
 
 // here is our main controller
 .controller('MainCtrl', [
@@ -57,3 +60,4 @@ angular.module('flapperNews', [])
 		};
 
 	}]);
+
