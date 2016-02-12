@@ -2,11 +2,11 @@
 // A note:
 // You may be wondering why we have chosen to use ui-router instead of the more standard ngRoute module - 
 // ui-router is newer and provides more flexibility and features than ngRoute. We will be using a few of these in this tutorial.
-angular.module('flapperNews', ['ui.router'])
+var myApp = angular.module('flapperNews', ['ui.router'])
 
 // this is the Angular config function to setup a home state
 // otherwise() redirects to unspecified routes
-.config([
+myApp.config([
 	'$stateProvider',
 	'$urlRouterProvider',
 	function($stateProvider, $urlRouterProvider) {
@@ -16,33 +16,39 @@ angular.module('flapperNews', ['ui.router'])
 				// the state is given a url
 				url: '/home',
 				// and a template
-				templateUrl: '/home.html',
+				templateUrl: 'home.html',
 				// and should be controlled by MainCtrl
 				controller: 'MainCtrl'
 			})
 			// the posts state configuration
-			.state('posts', {
+			.state('.posts', {
 				// brackets around id to indicate it is a route parameter
-				url: 'posts/{id}',
-				templateUrl: '/posts.html',
+				url: '/posts',
+				templateUrl: 'partial-comments.html',
 				controller: 'PostsCtrl'
 			})
 
+			.state('party', {
+				url: '/party',
+				template: '<h1>HELLO THIS LINK IS NOW WORKING!</h1>'
+
+			})
+
 		$urlRouterProvider.otherwise('home');
-	}])
+	}]);
 
 // this is a service 
 // You may be wondering why we're using the keyword factory instead of service. 
 // In angular, factory and service are related in that they are both instances of a third entity called provider.
-.factory('posts', [function(){
+myApp.factory('posts', [function(){
 	var o = {
 		posts: [{title: 'A new post!', link: "www.google.com", upvotes: 0}]
 	};
 	return o;
 
-}])
+}]);
 
-.controller('MainCtrl', [
+myApp.controller('MainCtrl', [
 	'$scope',
 	//this injects posts service into the main controller
 	'posts',
@@ -78,9 +84,9 @@ angular.module('flapperNews', ['ui.router'])
 			post.upvotes += 1;
 		};
 
-}])
+}]);
 
-.controller('PostsCtrl', [
+myApp.controller('PostsCtrl', [
 	'$scope',
 	// inject our state params to make sure we are sending the params for the post
 	'$stateParams',
@@ -91,4 +97,4 @@ angular.module('flapperNews', ['ui.router'])
 		// from the posts service using $stateParams
 		$scope.post = posts.posts[$stateParams.id];
 
-	}]);
+}]);
