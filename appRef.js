@@ -21,9 +21,9 @@ myApp.config([
 				controller: 'MainCtrl'
 			})
 			// the posts state configuration
-			.state('.posts', {
+			.state('posts', {
 				// brackets around id to indicate it is a route parameter
-				url: '/posts',
+				url: '/posts/{id}',
 				templateUrl: 'partial-comments.html',
 				controller: 'PostsCtrl'
 			})
@@ -42,7 +42,7 @@ myApp.config([
 // In angular, factory and service are related in that they are both instances of a third entity called provider.
 myApp.factory('posts', [function(){
 	var o = {
-		posts: [{title: 'A new post!', link: "www.google.com", upvotes: 0}]
+		posts: []
 	};
 	return o;
 
@@ -64,21 +64,10 @@ myApp.controller('MainCtrl', [
 				title: $scope.title,
 				link: $scope.link,
 				upvotes: 0,
-				comments: [
-					{author: 'Joe', body: 'Cool post!', upvotes: 0},
-    				{author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
-				]
+				comments: []
 			})
 		};
-		$scope.addComment = function(){
-			if($scope.body === '') { return; }
-  			$scope.post.comments.push({
-    			body: $scope.body,
-    			author: 'user',
-    			upvotes: 0
-  		});
-  			$scope.body = '';
-		};
+	
 		$scope.incrementUpvotes = function(post){
 			// increment that post's upvotes by 1
 			post.upvotes += 1;
@@ -97,4 +86,15 @@ myApp.controller('PostsCtrl', [
 		// from the posts service using $stateParams
 		$scope.post = posts.posts[$stateParams.id];
 
-}]);
+		$scope.addComment = function(){
+			if($scope.body === '') { return; }
+  			$scope.post.comments.push({
+    			body: $scope.body,
+    			author: 'user',
+    			upvotes: 0
+  		});
+  			$scope.body = '';
+		};
+	}
+		
+]);
